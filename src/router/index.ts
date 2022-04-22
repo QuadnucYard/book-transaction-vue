@@ -1,29 +1,38 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import Login from '../views/Login.vue'
-import Main from '../views/Main.vue'
+import login from '../views/login.vue'
+import register from '../views/register.vue'
+import index from '../views/index.vue'
 
 const routes: Array<RouteRecordRaw> = [
-	{
-		path: '/',
-		name: 'Login',
-		component: Login,
-		meta: {
-			keepalive: false
-		}
-	},
-	{
-		path: '/Main',
-		name: 'Main',
-		component: Main,
-		meta: {
-			keepalive: true
-		}
-	}
+  {
+    path: '/',
+    name: 'index',
+    component: index,
+    meta: {
+      keepalive: false
+    }
+  },
+  {
+    path: '/auth/login',
+    name: 'login',
+    component: login,
+    meta: {
+      keepalive: false
+    }
+  },
+  {
+    path: '/auth/register',
+    name: 'register',
+    component: register,
+    meta: {
+      keepalive: false
+    }
+  },
 ]
 
 const router = createRouter({
-	history: createWebHashHistory(),
-	routes
+  history: createWebHashHistory(),
+  routes
 })
 
 export default router

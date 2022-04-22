@@ -1,59 +1,72 @@
 <template>
   <div id="app">
-    <el-container v-if="$route.meta.keepalive">
-      <el-header class="header">
-        <keep-alive>
-          <!-- <v_Header></v_Header> -->
-        </keep-alive>
-      </el-header>
-      <el-container>
-        <el-aside style="width:200px; height:600px">
-          <keep-alive>
-            <!-- <v_leftmenu></v_leftmenu> -->
-          </keep-alive>
-        </el-aside>
-        <el-container>
-          <el-main>
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
-          </el-main>
-          <el-footer style=" padding-left: 0px;padding-right: 0px;">
-            <!-- <v_footer></v_footer> -->
-          </el-footer>
-        </el-container>
-      </el-container>
-    </el-container>
-    <router-view v-if="!$route.meta.keepalive"></router-view>
+    <nav>
+      <div>222</div>
+      <div>333</div>
+    </nav>
+    <el-header class="header">Header</el-header>
+    <!-- <el-menu>
+      <el-menu-item>item1</el-menu-item>
+    </el-menu>
+    <el-aside class="aside">Aside</el-aside> -->
+    <div class="main">
+      <router-view />
+    </div>
+    <el-footer class="footer">
+      <div>My Footer</div>
+    </el-footer>
   </div>
 </template>
 
 <script>
-//import LeftMenu from "./components/LeftMenu"
-//import Header from "./components/Header"
-//import  Footer from './components/Footer'
-
 export default {
-  name: 'App',
-  /*components: {
-    'v_Header': Header,
-    'v_leftmenu': LeftMenu,
-    'v_footer': Footer
-  }*/
-}
+  name: "App",
+};
 </script>
 
 <style>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
-  .header{
-    line-height: 60px;
-    background-color: #545c64;
-    color: white;
-  }
+body {
+  margin: 0;
+}
+
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+nav {
+  position: fixed;
+  width: 3.7em;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  line-height: 1.2;
+  z-index: 5;
+  background: rgb(52, 73, 94);
+  color: white;
+}
+
+.main {
+  background-color: rgb(239, 239, 239);
+}
+
+.aside {
+  background: rgb(52, 73, 94);
+}
+
+.header {
+  line-height: 60px;
+  background-color: white;
+  /* color: white; */
+}
+
+.footer {
+  background-color: rgba(0, 0, 0, 0.75);
+  position: relative;
+  height: 200px;
+}
 </style>
