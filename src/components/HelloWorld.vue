@@ -1,54 +1,75 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { ElMessage } from "element-plus";
 
 defineProps<{ msg: string }>();
 
 const count = ref(0);
+const input = ref("element-plus");
+
+const curDate = ref("");
+
+const toast = () => {
+    ElMessage.success("Hello");
+};
 </script>
 
 <template>
     <h1>{{ msg }}</h1>
 
     <p>
-        Recommended IDE setup:
-        <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-        +
-        <a href="https://github.com/johnsoncodehk/volar" target="_blank"
-            >Volar</a
-        >
+        See
+        <a href="https://element-plus.org" target="_blank">element-plus</a> for
+        more information.
     </p>
 
-    <p>See <code>README.md</code> for more information.</p>
+    <!-- example components -->
+    <el-button @click="toast">El Message</el-button>
+    <el-button type="primary" @click="count++">count is: {{ count }}</el-button>
+    <el-button type="success" @click="count++">count is: {{ count }}</el-button>
+    <el-button type="warning" @click="count++">count is: {{ count }}</el-button>
+    <el-button type="danger" @click="count++">count is: {{ count }}</el-button>
+    <el-button type="info" @click="count++">count is: {{ count }}</el-button>
+    <br />
+    <el-input v-model="input" style="width: 200px; margin: 20px" />
+    <el-tag>Tag 1</el-tag>
 
-    <p>
-        <a href="https://vitejs.dev/guide/features.html" target="_blank">
-            Vite Docs
-        </a>
-        |
-        <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-    </p>
+    <br />
+    <el-date-picker
+        v-model="curDate"
+        type="date"
+        placeholder="Pick a day"
+    ></el-date-picker>
 
-    <button type="button" @click="count++">count is: {{ count }}</button>
+    <p>For example, we can custom primary color to 'green'.</p>
+
     <p>
         Edit
-        <code>components/HelloWorld.vue</code> to test hot module replacement.
+        <code>components/HelloWorld.vue</code> to test components.
+    </p>
+    <p>
+        Edit
+        <code>styles/element/var.scss</code> to test scss variables.
+    </p>
+
+    <p>
+        Full Example:
+        <a
+            href="https://github.com/element-plus/element-plus-vite-starter"
+            target="_blank"
+            >element-plus-vite-starter</a
+        >
+        | On demand Example:
+        <a
+            href="https://github.com/element-plus/unplugin-element-plus"
+            target="_blank"
+            >unplugin-element-plus/examples/vite</a
+        >
     </p>
 </template>
 
-<style scoped>
-a {
-    color: #42b983;
-}
-
-label {
-    margin: 0 0.5em;
-    font-weight: bold;
-}
-
-code {
-    background-color: #eee;
-    padding: 2px 4px;
-    border-radius: 4px;
-    color: #304455;
+<style>
+.el-button {
+    margin: 4px;
 }
 </style>
