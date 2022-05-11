@@ -10,10 +10,12 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "element-plus": "^2.1.9",
     "js-cookie": "^3.0.1",
     "jsencrypt": "^3.2.1",
     "vue": "^3.2.32",
+    "vue-axios": "^3.4.1",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {

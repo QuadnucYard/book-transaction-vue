@@ -15,7 +15,11 @@ import router from "./router";
 // If you want to use ElMessage, import it.
 import "element-plus/theme-chalk/src/message.scss"
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
 const app = createApp(App);
 app.use(router);
 // app.use(ElementPlus);
+app.use(VueAxios, axios)
 app.mount("#app");

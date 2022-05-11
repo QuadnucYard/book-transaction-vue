@@ -1,0 +1,11 @@
+<template>
+  <main>
+    <el-tabs>
+      <span></span>
+      <span>我购买的书</span>
+      <span>我发布的书</span>
+      <span></span>
+      <span>设置</span>
+    </el-tabs>
+  </main>
+</template>
