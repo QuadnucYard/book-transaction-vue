@@ -45,7 +45,7 @@
       <el-form-item style="width: 100%">
         <el-button
           :loading="loading"
-          size="medium"
+          size="default"
           type="primary"
           style="width: 100%"
           @click.prevent="handleLogin"
@@ -146,7 +146,7 @@ export default {
           user.password = encrypt(user.password);
         }
         if (valid) {
-          this.loading = true;
+          //this.loading = true;
           if (user.rememberMe) {
             Cookies.set("username", user.username, {
               expires: Config.passCookieExpires,
@@ -162,13 +162,29 @@ export default {
             Cookies.remove("password");
             Cookies.remove("rememberMe");
           }
-          // 模拟登录成功
-          console.log("登录成功");
-          self.$router.push({ name: "index" });
-          ElMessage({
-            message: "登录成功",
-            type: "success",
-          });
+
+          this.$http
+            .post("/login", this.$data.loginForm)
+            .then((res) => {
+              if (res.data.code == 200) {
+                self.$router.replace({ name: "index" });
+                ElMessage({
+                  message: "登录成功",
+                  type: "success",
+                });
+              } else {
+                ElMessage({
+                  message: "登录失败，账号密码错误",
+                  type: "error",
+                });
+              }
+            })
+            .catch((err) => {
+              ElMessage({
+                message: "登录失败，网络连接错误",
+                type: "error",
+              });
+            });
         } else {
           console.log("error submit!!");
           ElMessage({

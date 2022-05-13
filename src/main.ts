@@ -18,6 +18,8 @@ import "element-plus/theme-chalk/src/message.scss"
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+axios.defaults.baseURL = 'http://localhost:8081/api'
+
 const app = createApp(App);
 app.use(router);
 // app.use(ElementPlus);

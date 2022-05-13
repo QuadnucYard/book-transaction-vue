@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     searchBook() {
-      console.log("search book");
+      console.log("search book", this.axios);
       this.$http
         .post("/api/book/list", this.$data.searchForm)
         .then((res) => {
