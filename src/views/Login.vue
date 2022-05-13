@@ -133,7 +133,6 @@ export default {
     },
     handleLogin() {
       const self = this;
-      console.log(this);
       this.$refs.loginForm.validate((valid) => {
         const user = {
           username: this.loginForm.username,
@@ -163,18 +162,26 @@ export default {
             Cookies.remove("rememberMe");
           }
 
+          console.log("store", this.$store.state);
           this.$http
             .post("/login", this.$data.loginForm)
             .then((res) => {
+              console.log("reLogin", res.data);
               if (res.data.code == 200) {
-                self.$router.replace({ name: "index" });
+                self.$store.commit("login", self.loginForm);
+                let path = self.$route.params.redirect;
+                if (path) {
+                  self.$router.replace({ path: path });
+                } else {
+                  self.$router.replace({ name: "index" });
+                }
                 ElMessage({
-                  message: "登录成功",
+                  message: res.data.message,
                   type: "success",
                 });
               } else {
                 ElMessage({
-                  message: "登录失败，账号密码错误",
+                  message: res.data.message,
                   type: "error",
                 });
               }

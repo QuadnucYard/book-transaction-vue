@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import store from "./store"
 
 // import "~/styles/element/index.scss";
 
@@ -20,8 +21,22 @@ import VueAxios from 'vue-axios'
 
 axios.defaults.baseURL = 'http://localhost:8081/api'
 
+router.beforeEach((to, from, next) => {
+  console.log("beforeEach", to.meta.requireAuth);
+  if (to.meta.requireAuth && !store.state.user.username) {
+    next({
+      name: 'login',
+      params: { redirect: to.fullPath }
+    });
+  } else {
+    next();
+  }
+}
+);
+
 const app = createApp(App);
 app.use(router);
+app.use(store)
 // app.use(ElementPlus);
 app.use(VueAxios, axios)
 app.mount("#app");

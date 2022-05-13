@@ -11,6 +11,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'index',
     component: index,
     meta: {
+      //requireAuth: true,
       keepalive: false
     }
   },
