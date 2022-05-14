@@ -34,12 +34,16 @@
           v-model="loginForm.code"
           auto-complete="off"
           placeholder="验证码"
-          style="width: 63%"
+          style="width: 55%"
           @keyup.enter="handleLogin"
         />
         <div class="login-code">
-          <div style="cursor: pointer" @click="getCode" v-html="captcha"></div>
-          <!-- <img :src="codeUrl" @click="getCode" /> -->
+          <img
+            :src="captcha"
+            title="看不清？点击刷新"
+            @click="getCode"
+            alt=""
+          />
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe"> 记住我 </el-checkbox>
@@ -73,14 +77,12 @@ export default {
   data() {
     return {
       captcha: "",
-      captchaText: "",
       cookiePass: "",
       loginForm: {
         username: "",
         password: "",
         rememberMe: false,
         code: "",
-        uuid: "",
       },
       loginRules: {
         username: [
@@ -90,7 +92,7 @@ export default {
           { required: true, trigger: "blur", message: "密码不能为空" },
         ],
         code: [
-          { required: false, trigger: "change", message: "验证码不能为空" },
+          { required: true, trigger: "change", message: "验证码不能为空" },
         ],
       },
       loading: false,
@@ -114,7 +116,10 @@ export default {
     this.point();
   },
   methods: {
-    getCode() {},
+    getCode() {
+      this.captcha =
+        this.$http.defaults.baseURL + "/kaptcha?d=" + new Date().getTime();
+    },
     getCookie() {
       const username = Cookies.get("username");
       let password = Cookies.get("password");
@@ -138,7 +143,6 @@ export default {
           password: this.loginForm.password,
           rememberMe: this.loginForm.rememberMe,
           code: this.loginForm.code,
-          uuid: this.loginForm.uuid,
         };
         // 加密不是一一映射的……前端搞一下后端就出事了
         /*if (user.password !== this.cookiePass) {
