@@ -19,20 +19,28 @@ import "element-plus/theme-chalk/src/message.scss"
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-axios.defaults.baseURL = 'http://localhost:8081/api'
+axios.defaults.baseURL = 'http://localhost:8081/api';
+axios.defaults.withCredentials = true;
 
 router.beforeEach((to, from, next) => {
   console.log("beforeEach", to.meta.requireAuth);
-  if (to.meta.requireAuth && !store.state.user.username) {
-    next({
-      name: 'login',
-      params: { redirect: to.fullPath }
-    });
+  if (to.meta.requireAuth) {
+    if (store.state.username) {
+      axios.get('/auth').then(resp => {
+        if (resp) {
+          next();
+        }
+      });
+    } else {
+      next({
+        path: 'login',
+        query: { redirect: to.fullPath }
+      });
+    }
   } else {
     next();
   }
-}
-);
+});
 
 const app = createApp(App);
 app.use(router);

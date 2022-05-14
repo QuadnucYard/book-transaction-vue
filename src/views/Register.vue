@@ -3,34 +3,36 @@
     <section>
       <div>
         <el-form
-          ref="ruleForm"
-          :model="ruleForm"
+          ref="registerForm"
+          :model="registerForm"
           :rules="rules"
           label-width="100px"
-          class="demo-ruleForm"
+          class="demo-registerForm"
           autocomplete="off"
         >
           <el-form-item label="用户名" prop="name">
-            <el-input v-model="ruleForm.name" />
+            <el-input v-model="registerForm.name" />
           </el-form-item>
           <el-form-item label="密码" prop="pwd">
-            <el-input v-model="ruleForm.pwd" type="password" />
+            <el-input v-model="registerForm.pwd" type="password" />
           </el-form-item>
           <el-form-item label="确认密码" prop="cpwd">
-            <el-input v-model="ruleForm.cpwd" type="password" />
+            <el-input v-model="registerForm.cpwd" type="password" />
           </el-form-item>
           <el-form-item label="验证码" prop="code">
-            <el-input v-model="ruleForm.code" maxlength="4" />
+            <el-input v-model="registerForm.code" maxlength="4" />
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="ruleForm.email" />
+            <el-input v-model="registerForm.email" />
             <el-button size="small" round @click="sendMsg"
               >发送验证码</el-button
             >
             <span class="status">{{ statusMsg }}</span>
           </el-form-item>
           <el-form-item prop="agreed">
-            <el-checkbox v-model="ruleForm.agreed">同意注册协议</el-checkbox>
+            <el-checkbox v-model="registerForm.agreed"
+              >同意注册协议</el-checkbox
+            >
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="register">注册</el-button>
@@ -46,6 +48,9 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
+import { encrypt } from "../utils/rsaEncrypt";
+
 export default {
   data() {
     return {
@@ -53,7 +58,7 @@ export default {
       active: 0,
       statusMsg: "",
       error: "",
-      ruleForm: {
+      registerForm: {
         name: "",
         code: "",
         pwd: "",
@@ -108,7 +113,7 @@ export default {
             validator: (rule, value, callback) => {
               if (value === "") {
                 callback(new Error("请再次输入密码"));
-              } else if (value !== this.ruleForm.pwd) {
+              } else if (value !== this.registerForm.pwd) {
                 callback(new Error("两次输入密码不一致"));
               } else {
                 callback();
@@ -129,14 +134,14 @@ export default {
       if (self.timerid) {
         return false;
       }
-      this.$refs["ruleForm"].validateField("name", (valid) => {
+      this.$refs["registerForm"].validateField("name", (valid) => {
         namePass = valid;
       });
       self.statusMsg = "";
       if (namePass) {
         return false;
       }
-      this.$refs["ruleForm"].validateField("email", (valid) => {
+      this.$refs["registerForm"].validateField("email", (valid) => {
         emailPass = valid;
       });
       // 模拟验证码发送
@@ -153,9 +158,36 @@ export default {
     },
     // 模拟登录
     register: function () {
-      this.$refs["ruleForm"].validate((valid) => {
+      let self = this;
+      this.$refs["registerForm"].validate((valid) => {
         if (valid) {
-          setTimeout(this.$router.push({ name: "login" }), 1000);
+          //setTimeout(this.$router.push({ name: "login" }), 1000);
+          this.$http
+            .post("/auth/register", {
+              username: this.registerForm.name,
+              password: this.registerForm.pwd,
+              name: "",
+              phone: "",
+              email: this.registerForm.email,
+            })
+            .then((res) => {
+              console.log("reRegister", res.data);
+              if (res.data.code == 200) {
+                self.$store.commit("login", res.data.result);
+                let path = self.$route.query.redirect;
+                if (path) {
+                  self.$router.replace({ path: path });
+                } else {
+                  self.$router.replace({ name: "index" });
+                }
+                ElMessage({ message: res.data.message, type: "success" });
+              } else {
+                ElMessage({ message: res.data.message, type: "error" });
+              }
+            })
+            .catch((err) => {
+              ElMessage({ message: "注册失败，网络连接错误", type: "error" });
+            });
         }
       });
     },
@@ -163,7 +195,7 @@ export default {
 };
 </script>
 
-<style  rel="stylesheet/scss" lang="scss">
+<style  lang="scss" scoped>
 .page-register {
   .register {
     color: #1890ff;

@@ -38,6 +38,7 @@
           @keyup.enter="handleLogin"
         />
         <div class="login-code">
+          <div style="cursor: pointer" @click="getCode" v-html="captcha"></div>
           <!-- <img :src="codeUrl" @click="getCode" /> -->
         </div>
       </el-form-item>
@@ -63,14 +64,16 @@
 
 <script>
 // 加密
-import { encrypt } from "../utils/rsaEncrypt.js";
+import { encrypt, decrypt } from "../utils/rsaEncrypt.js";
 import Cookies from "js-cookie";
 import { ElMessage } from "element-plus";
+
 export default {
   name: "Login",
   data() {
     return {
-      codeUrl: "",
+      captcha: "",
+      captchaText: "",
       cookiePass: "",
       loginForm: {
         username: "",
@@ -87,7 +90,7 @@ export default {
           { required: true, trigger: "blur", message: "密码不能为空" },
         ],
         code: [
-          { required: true, trigger: "change", message: "验证码不能为空" },
+          { required: false, trigger: "change", message: "验证码不能为空" },
         ],
       },
       loading: false,
@@ -111,29 +114,25 @@ export default {
     this.point();
   },
   methods: {
-    getCode() {
-      // 模拟返回验证码图片
-      this.codeUrl =
-        "http://www.demodashi.com/ueditor/jsp/upload/image/20170802/1501642847473057707.jpeg";
-      this.loginForm.uuid = "111";
-    },
+    getCode() {},
     getCookie() {
       const username = Cookies.get("username");
       let password = Cookies.get("password");
-      const rememberMe = Cookies.get("rememberMe");
+      const rememberMe = Cookies.get("rememberMe"); // BUG 这个读不到
       // 保存cookie里面的加密后的密码
       this.cookiePass = password === undefined ? "" : password;
       password = password === undefined ? this.loginForm.password : password;
       this.loginForm = {
         username: username === undefined ? this.loginForm.username : username,
         password: password,
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
+        rememberMe: rememberMe !== undefined,
         code: "",
       };
     },
     handleLogin() {
       const self = this;
       this.$refs.loginForm.validate((valid) => {
+        console.log("handleLogin valid ?", valid);
         const user = {
           username: this.loginForm.username,
           password: this.loginForm.password,
@@ -141,44 +140,34 @@ export default {
           code: this.loginForm.code,
           uuid: this.loginForm.uuid,
         };
-        if (user.password !== this.cookiePass) {
+        // 加密不是一一映射的……前端搞一下后端就出事了
+        /*if (user.password !== this.cookiePass) {
           user.password = encrypt(user.password);
-        }
+        }*/
         if (valid) {
           //this.loading = true;
           if (user.rememberMe) {
-            Cookies.set("username", user.username, {
-              expires: Config.passCookieExpires,
-            });
-            Cookies.set("password", user.password, {
-              expires: Config.passCookieExpires,
-            });
-            Cookies.set("rememberMe", user.rememberMe, {
-              expires: Config.passCookieExpires,
-            });
+            Cookies.set("username", user.username, { expires: 7 });
+            Cookies.set("password", user.password, { expires: 7 });
+            Cookies.set("rememberMe", user.rememberMe, { expires: 7 });
           } else {
             Cookies.remove("username");
             Cookies.remove("password");
             Cookies.remove("rememberMe");
           }
-
           console.log("store", this.$store.state);
           this.$http
-            .post("/login", this.$data.loginForm)
+            .post("/auth/login", user)
             .then((res) => {
               console.log("reLogin", res.data);
               if (res.data.code == 200) {
-                self.$store.commit("login", self.loginForm);
-                let path = self.$route.params.redirect;
-                if (path) {
-                  self.$router.replace({ path: path });
-                } else {
-                  self.$router.replace({ name: "index" });
-                }
+                self.$store.commit("login", res.data.result);
+                self.$router.replace({ path: this.redirect || "/" });
                 ElMessage({
                   message: res.data.message,
                   type: "success",
                 });
+                return true;
               } else {
                 ElMessage({
                   message: res.data.message,
@@ -193,24 +182,20 @@ export default {
               });
             });
         } else {
-          console.log("error submit!!");
-          ElMessage({
-            message: "登录失败",
-            type: "error",
-          });
-          return false;
+          ElMessage({ message: "登录失败", type: "error" });
         }
+        return false;
       });
     },
     point() {
       const point = Cookies.get("point") !== undefined;
       if (point) {
-        /*this.$notify({
+        this.$notify({
           title: "提示",
           message: "当前登录状态已过期，请重新登录！",
           type: "warning",
           duration: 5000,
-        });*/
+        });
         Cookies.remove("point");
       }
     },
@@ -218,7 +203,7 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style lang="scss" scoped>
 .login {
   display: flex;
   justify-content: center;
