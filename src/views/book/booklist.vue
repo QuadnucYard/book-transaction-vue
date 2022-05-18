@@ -10,7 +10,7 @@
               auto-complete="off"
               placeholder="请输入书相关信息"
               style="width: 100%"
-              v-model="searchForm.content"
+              v-model="searchForm.keywords"
             ></el-input
           ></el-col>
           <el-col :span="1">
@@ -21,7 +21,7 @@
         </el-row>
       </el-form>
     </div>
-    <div class="card" style="padding: 1.3em">
+    <div class="card" style="padding: 1.3em; display: none">
       <div>
         <div class="table">
           <div class="header-wrap">
@@ -32,7 +32,7 @@
           <div class="row" v-for="item in list" :key="item.id">
             <span style="width: 6em">{{ item.id }}</span>
             <span style="width: 100%">{{ item.name }}</span>
-            <span style="width: 8em">{{ item.author }}</span>
+            <span style="width: 8em">{{ item.book.author }}</span>
           </div>
         </div>
       </div>
@@ -44,17 +44,19 @@
             <div>
               <span>{{ item.id }}</span>
               <span @click="toBookView(item)">{{ item.name }}</span>
-              <span>{{ item.poster }}</span>
-              <span>{{ item.postdate }}</span>
+              <span>{{ item.price }}</span>
+              <span>{{ item.seller.username }}</span>
+              <span>{{ item.date }}</span>
             </div>
           </div>
           <div>
-            <p v-if="item.title">{{ item.title }}</p>
-            <p v-if="item.author">{{ item.author }}</p>
-            <p v-if="item.publisher">{{ item.publisher }}</p>
-            <p v-if="item.pubdate">{{ item.pubdate }}</p>
+            <p v-if="item.book.title">{{ item.book.title }}</p>
+            <p v-if="item.book.author">{{ item.book.author }}</p>
+            <p v-if="item.book.publisher">{{ item.book.publisher }}</p>
+            <p v-if="item.book.date">{{ item.book.date }}</p>
           </div>
           <div>
+            <p>{{ item.desc }}</p>
             <!-- <img :src="item.image" /> -->
           </div>
         </div>
@@ -65,6 +67,7 @@
 
 
 <script>
+import { ElMessage } from "element-plus";
 import { queryBookList } from "../../api/localservice.ts";
 
 export default {
@@ -72,7 +75,7 @@ export default {
   data() {
     return {
       searchForm: {
-        content: "",
+        keywords: "",
       },
       list: [],
     };
@@ -85,13 +88,14 @@ export default {
     searchBook() {
       console.log("search book", this.axios);
       this.$http
-        .post("/api/book/list", this.$data.searchForm)
+        .get("/goods/list", { params: this.searchForm })
         .then((res) => {
-          console.log("then", arguments);
+          console.log(res);
+          this.list = res.data.result;
         })
         .catch((err) => {
-          console.log("err", arguments);
-          this.$data.list = queryBookList(this.$data.searchForm);
+          ElMessage.error({ message: "网络异常" });
+          //this.$data.list = queryBookList(this.$data.searchForm);
         })
         .then(() => {
           console.log("finally", arguments);
