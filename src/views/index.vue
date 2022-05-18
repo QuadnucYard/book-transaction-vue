@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>这是主页</div>
+    <div style="text-align: center; font-size: 2em">欢迎来到主页！</div>
   </div>
 </template>
 
