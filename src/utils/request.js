@@ -1,15 +1,15 @@
 import axios from 'axios'
 import router from '@/router/index'
-import { Notification } from 'element-ui'
+import { ElMessage } from 'element-plus'
 import store from '../store'
 import { getToken } from '@/utils/auth'
-import Config from '@/settings'
+//import Config from '@/settings'
 import Cookies from 'js-cookie'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
-  timeout: Config.timeout // 请求超时时间
+  baseURL: axios.defaults.baseURL, // api 的 base_url
+  timeout: 5000 // 请求超时时间
 })
 
 // request拦截器
@@ -33,7 +33,7 @@ service.interceptors.response.use(
   response => {
     const code = response.status
     if (code < 200 || code > 300) {
-      Notification.error({
+      ElMessage.error({
         title: response.message
       })
       return Promise.reject('error')
@@ -47,7 +47,7 @@ service.interceptors.response.use(
       code = error.response.data.status
     } catch (e) {
       if (error.toString().indexOf('Error: timeout') !== -1) {
-        Notification.error({
+        ElMessage.error({
           title: '网络请求超时',
           duration: 5000
         })
@@ -66,14 +66,14 @@ service.interceptors.response.use(
       } else {
         const errorMsg = error.response.data.message
         if (errorMsg !== undefined) {
-          Notification.error({
+          ElMessage.error({
             title: errorMsg,
             duration: 5000
           })
         }
       }
     } else {
-      Notification.error({
+      ElMessage.error({
         title: '接口请求失败',
         duration: 5000
       })

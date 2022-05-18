@@ -11,7 +11,9 @@
       <el-menu-item v-for="(item, i) in navList" :key="i" :index="item.name">
         {{ item.navItem }}
       </el-menu-item>
-      <i class="el-icon-menu" style="float: right; font-size: 45px; color: #222; padding-top: 8px"></i>
+      <i
+        class="el-icon-menu"
+        style="float: right; font-size: 45px; color: #222; padding-top: 8px"></i>
     </el-menu>
     <div class="right">
       <el-link type="primary" :underline="false" v-show="loggedin">

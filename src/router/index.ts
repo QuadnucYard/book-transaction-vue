@@ -55,6 +55,14 @@ const routes: Array<RouteRecordRaw> = [
       keepalive: false
     }
   },
+  {
+    path: '/book/post',
+    name: 'bookpost',
+    component: () => import("../views/book/bookpost.vue"),
+    meta: {
+      keepalive: false
+    }
+  },
 ]
 
 const router = createRouter({
