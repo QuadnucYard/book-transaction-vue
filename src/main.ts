@@ -25,7 +25,7 @@ axios.defaults.withCredentials = true;
 router.beforeEach((to, from, next) => {
   console.log("beforeEach", to.meta.requireAuth);
   if (to.meta.requireAuth) {
-    if (store.state.username) {
+    if (store.state.user) {
       axios.get('/auth').then(resp => {
         if (resp) {
           next();

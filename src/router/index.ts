@@ -51,6 +51,15 @@ const routes: Array<RouteRecordRaw> = [
       requireAuth: true
     }
   },
+  {
+    path: '/user/:uid',
+    name: 'userhome',
+    component: () => import("@/views/user/home.vue"),
+    meta: {
+      keepalive: false,
+      requireAuth: true
+    }
+  },
 ]
 
 const router = createRouter({

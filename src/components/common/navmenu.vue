@@ -22,7 +22,9 @@
       <el-link type="primary" :underline="false" v-show="!username">
         <router-link :to="{ name: 'login' }">登录</router-link>
       </el-link>
-      <el-link type="default" :underline="false" v-show="username">{{ username }}</el-link>
+      <el-link type="default" :underline="false" v-show="username" @click="toHome">{{
+        username
+      }}</el-link>
       <el-link type="primary" :underline="false" v-show="username" @click="logout"> 注销 </el-link>
     </div>
   </div>
@@ -43,7 +45,7 @@ export default {
   },
   computed: {
     username() {
-      return this.$store.state.username;
+      return this.$store.state.user?.name;
     },
   },
   methods: {
@@ -52,6 +54,15 @@ export default {
       this.$http.get("/auth/logout").then(res => {
         self.$store.commit("logout");
         ElMessage.success("成功注销");
+      });
+    },
+    toHome() {
+      console.log(this.$store.state.user);
+      this.$router.push({
+        name: "userhome",
+        params: {
+          uid: this.$store.state.user.uid,
+        },
       });
     },
   },
