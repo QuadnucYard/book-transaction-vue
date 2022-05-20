@@ -1,5 +1,5 @@
 <template>
-  <div class="page-register">
+  <div class="page-register" style="padding: 1em">
     <section>
       <div>
         <el-form
@@ -8,8 +8,7 @@
           :rules="rules"
           label-width="100px"
           class="demo-registerForm"
-          autocomplete="off"
-        >
+          autocomplete="off">
           <el-form-item label="用户名" prop="name">
             <el-input v-model="registerForm.name" />
           </el-form-item>
@@ -24,15 +23,11 @@
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="registerForm.email" />
-            <el-button size="small" round @click="sendMsg"
-              >发送验证码</el-button
-            >
+            <el-button size="small" round @click="sendMsg">发送验证码</el-button>
             <span class="status">{{ statusMsg }}</span>
           </el-form-item>
           <el-form-item prop="agreed">
-            <el-checkbox v-model="registerForm.agreed"
-              >同意注册协议</el-checkbox
-            >
+            <el-checkbox v-model="registerForm.agreed">同意注册协议</el-checkbox>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="register">注册</el-button>
@@ -134,14 +129,14 @@ export default {
       if (self.timerid) {
         return false;
       }
-      this.$refs["registerForm"].validateField("name", (valid) => {
+      this.$refs["registerForm"].validateField("name", valid => {
         namePass = valid;
       });
       self.statusMsg = "";
       if (namePass) {
         return false;
       }
-      this.$refs["registerForm"].validateField("email", (valid) => {
+      this.$refs["registerForm"].validateField("email", valid => {
         emailPass = valid;
       });
       // 模拟验证码发送
@@ -159,7 +154,7 @@ export default {
     // 模拟登录
     register: function () {
       let self = this;
-      this.$refs["registerForm"].validate((valid) => {
+      this.$refs["registerForm"].validate(valid => {
         if (valid) {
           //setTimeout(this.$router.push({ name: "login" }), 1000);
           this.$http
@@ -170,7 +165,7 @@ export default {
               phone: "",
               email: this.registerForm.email,
             })
-            .then((res) => {
+            .then(res => {
               console.log("reRegister", res.data);
               if (res.data.code == 200) {
                 self.$store.commit("login", res.data.result);
@@ -185,7 +180,7 @@ export default {
                 ElMessage({ message: res.data.message, type: "error" });
               }
             })
-            .catch((err) => {
+            .catch(err => {
               ElMessage({ message: "注册失败，网络连接错误", type: "error" });
             });
         }

@@ -1,32 +1,19 @@
-import { createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw } from 'vue-router'
-import login from '../views/login.vue'
-import register from '../views/register.vue'
-import index from '../views/index.vue'
-import booklist from '../views/book/booklist.vue'
-import bookview from '../views/book/bookview.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'index',
-    component: index,
-    meta: {
-      //requireAuth: true,
-      keepalive: false
-    }
-  },
-  {
-    path: '/index',
-    name: 'index',
-    component: index,
+    component: () => import("@/views/index.vue"),
     meta: {
       keepalive: false
-    }
+    },
+    alias: "/index"
   },
   {
     path: '/auth/login',
     name: 'login',
-    component: login,
+    component: () => import("@/views/login.vue"),
     meta: {
       keepalive: false
     }
@@ -34,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/auth/register',
     name: 'register',
-    component: register,
+    component: () => import("@/views/register.vue"),
     meta: {
       keepalive: false
     }
@@ -42,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/book/list',
     name: 'booklist',
-    component: booklist,
+    component: () => import("@/views/book/booklist.vue"),
     meta: {
       keepalive: false
     }
@@ -50,7 +37,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/book/:bookid',
     name: 'bookview',
-    component: bookview,
+    component: () => import("@/views/book/bookview.vue"),
     meta: {
       keepalive: false
     }
@@ -58,9 +45,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/book/post',
     name: 'bookpost',
-    component: () => import("../views/book/bookpost.vue"),
+    component: () => import("@/views/book/bookpost.vue"),
     meta: {
-      keepalive: false
+      keepalive: false,
+      requireAuth: true
     }
   },
 ]

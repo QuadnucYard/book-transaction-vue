@@ -16,17 +16,20 @@
         style="float: right; font-size: 45px; color: #222; padding-top: 8px"></i>
     </el-menu>
     <div class="right">
-      <el-link type="primary" :underline="false" v-show="loggedin">
-        <router-link :to="{ name: 'register' }">注册</router-link></el-link
-      >
-      <el-link type="primary" :underline="false" v-show="loggedin">
-        <router-link :to="{ name: 'login' }">登录</router-link></el-link
-      >
+      <el-link type="primary" :underline="false" v-show="!username">
+        <router-link :to="{ name: 'register' }">注册</router-link>
+      </el-link>
+      <el-link type="primary" :underline="false" v-show="!username">
+        <router-link :to="{ name: 'login' }">登录</router-link>
+      </el-link>
+      <el-link type="default" :underline="false" v-show="username">{{ username }}</el-link>
+      <el-link type="primary" :underline="false" v-show="username" @click="logout"> 注销 </el-link>
     </div>
   </div>
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 export default {
   name: "NavMenu",
   data() {
@@ -39,9 +42,17 @@ export default {
     };
   },
   computed: {
-    loggedin() {
-      console.log(this.$store.state);
-      return this.$store.state.username != null;
+    username() {
+      return this.$store.state.username;
+    },
+  },
+  methods: {
+    logout() {
+      const self = this;
+      this.$http.get("/auth/logout").then(res => {
+        self.$store.commit("logout");
+        ElMessage.success("成功注销");
+      });
     },
   },
 };
