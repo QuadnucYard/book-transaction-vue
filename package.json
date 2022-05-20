@@ -14,10 +14,7 @@
     "element-plus": "^2.1.9",
     "js-cookie": "^3.0.1",
     "jsencrypt": "^3.2.1",
-<<<<<<< HEAD
     "underscore": "^1.13.3",
-=======
->>>>>>> d0daf76 (一个勉强能看的页面)
     "vue": "^3.2.32",
     "vue-axios": "^3.4.1",
     "vue-router": "^4.0.14",
