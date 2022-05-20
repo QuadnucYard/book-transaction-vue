@@ -37,6 +37,7 @@ export default defineConfig({
       dts: 'src/components.d.ts',
     }),
   ],
+<<<<<<< HEAD
   server: {
     proxy: {
       '/api': {
@@ -46,4 +47,6 @@ export default defineConfig({
       }
     }
   }
+=======
+>>>>>>> 124a770 (暂存)
 })

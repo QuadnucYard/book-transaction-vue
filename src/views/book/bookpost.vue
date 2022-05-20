@@ -23,17 +23,34 @@
       </el-form-item>
       <div style="border: 2px solid #dddddd; border-radius: 5px; padding: 1em; margin: 1em">
         <h4 class="title">这是书籍信息~</h4>
+        <!-- TODO 显示字段是否已存在于数据库的提示 -->
         <el-form-item prop="book.title" label="书名">
-          <el-input v-model="postForm.book.title" type="text" />
+          <el-autocomplete
+            v-model="postForm.book.title"
+            :fetch-suggestions="querySearchTitle"
+            :trigger-on-focus="false"
+            clearable
+            class="inline-input w-50"
+            @select="handleSelectBookTitle" />
         </el-form-item>
         <el-form-item prop="book.author" label="作者">
-          <el-input v-model="postForm.book.author" type="text" />
+          <el-autocomplete
+            v-model="postForm.book.author"
+            :fetch-suggestions="querySearchAuthor"
+            :trigger-on-focus="false"
+            clearable
+            @select="handleSelectBookTitle" />
         </el-form-item>
-        <el-form-item prop="bookpublisher" label="出版社">
-          <el-input v-model="postForm.book.publisher" type="text" />
+        <el-form-item prop="book.publisher" label="出版社">
+          <el-autocomplete
+            v-model="postForm.book.publisher"
+            :fetch-suggestions="querySearchPublisher"
+            :trigger-on-focus="false"
+            clearable
+            @select="handleSelectBookTitle" />
         </el-form-item>
         <el-form-item prop="bookdate" label="出版日期">
-          <el-date-picker v-model="postForm.book.date" type="date" />
+          <el-date-picker v-model="postForm.book.date" type="month" />
         </el-form-item>
         <el-form-item prop="bookabs" label="简介">
           <el-input v-model="postForm.book.abs" type="textarea" rows="3" />
@@ -48,7 +65,8 @@
 
 <script>
 import { ElMessage } from "element-plus";
-import request from "@/utils/request.js";
+import axios from "@/utils/request.js";
+import _ from "underscore";
 
 export default {
   setup() {},
@@ -89,25 +107,63 @@ export default {
             trigger: "blur",
           },
         ],
+        "book.publisher": [
+          {
+            required: true,
+            message: "请输入出版社",
+            trigger: "blur",
+          },
+        ],
       },
+      booklib: null,
     };
+  },
+  mounted() {
+    const self = this;
+    axios.get("/book/list").then(res => {
+      console.log(res);
+      if (res.result) self.booklib = res.result;
+    });
   },
   methods: {
     onSubmit() {
-      this.$refs.postForm.validate((valid) => {
+      this.$refs.postForm.validate(valid => {
         if (valid) {
           ElMessage.info("提交请求");
-          request({
+          axios({
             url: "/goods/post",
             method: "post",
             data: this.postForm,
-          }).then((res) => {
+          }).then(res => {
             console.log(res);
             ElMessage.success("成功发布");
-            this.$router.push({ name: "index" });
+            //this.$router.push({ name: "index" });
           });
         }
       });
+    },
+    queryFilter(queryString, key) {
+      if (!this.booklib) return [];
+      queryString = queryString.toLowerCase();
+      return _.chain(this.booklib)
+        .filter(t => t[key].toLowerCase().startsWith(queryString))
+        .uniq(false, t => t[key])
+        .map(t => {
+          return { value: t[key], book: t };
+        })
+        .value();
+    },
+    querySearchTitle(queryString, cb) {
+      cb(this.queryFilter(queryString, "title"));
+    },
+    querySearchAuthor(queryString, cb) {
+      cb(this.queryFilter(queryString, "author"));
+    },
+    querySearchPublisher(queryString, cb) {
+      cb(this.queryFilter(queryString, "publisher"));
+    },
+    handleSelectBookTitle(item) {
+      console.log(item);
     },
   },
 };
