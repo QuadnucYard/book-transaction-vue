@@ -1,13 +1,19 @@
 <template>
   <main>
-    <div>欢迎！ {{ user?.username }}</div>
-    <el-tabs>
-      <span></span>
-      <span>我购买的书</span>
-      <span>我发布的书</span>
-      <span></span>
-      <span>设置</span>
-    </el-tabs>
+    <div>
+      <h2>欢迎！ {{ this.$store.state.user.name }}</h2>
+    </div>
+    <div class="header-container">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="主页" name="main"></el-tab-pane>
+        <el-tab-pane label="我购买的书" name="purchase"></el-tab-pane>
+        <el-tab-pane label="我发布的书" name="post"></el-tab-pane>
+        <el-tab-pane label="个人设置" name="setting"></el-tab-pane>
+      </el-tabs>
+    </div>
+    <div class="full-container">
+      <router-view />
+    </div>
   </main>
 </template>
 
@@ -15,15 +21,29 @@
 export default {
   data() {
     return {
-      user: null,
+      activeName: "purchase",
     };
   },
-  mounted() {
-    const self = this;
-    this.$http.get("/user/" + this.$store.state.user.uid).then(res => {
-      self.user = res.data.result;
-      console.log(res.data);
-    });
+  mounted() {},
+  methods: {
+    handleClick(tab, event) {
+      console.log(tab.props.name, this.$route.hash);
+      this.$router.push({ path: `/user/${this.$store.state.user.uid}/${tab.props.name}` });
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+main {
+  background: white;
+  margin: 0em 10em;
+  padding: 2em 2em;
+}
+.header-container {
+}
+
+.full-container {
+  // margin: 5em;
+}
+</style>

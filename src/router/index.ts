@@ -55,6 +55,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/user/:uid',
     name: 'userhome',
     component: () => import("@/views/user/home.vue"),
+    children: [
+      { path: 'main', component: () => import("@/views/user/main.vue") },
+      { path: 'purchase', component: () => import("@/views/user/mypurchase.vue") },
+      { path: 'post', component: () => import("@/views/user/mypost.vue") },
+      { path: 'setting', component: () => import("@/views/user/setting.vue") },
+    ],
     meta: {
       keepalive: false,
       requireAuth: true
