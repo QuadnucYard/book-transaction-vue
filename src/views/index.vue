@@ -1,17 +1,28 @@
 <template>
   <div>
-    <div style="text-align: center; font-size: 2em">欢迎来到主页！</div>
+    <el-header class="header">
+      <nav-menu></nav-menu>
+    </el-header>
+    <div class="main">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
+import NavMenu from "@/components/common/navmenu.vue";
+
 export default {
-  setup() {},
+  components: { NavMenu },
 };
 </script>
 
 <style scoped>
 div > span {
   margin: 1em;
+}
+
+.main {
+  background-color: rgb(239, 239, 239);
 }
 </style>

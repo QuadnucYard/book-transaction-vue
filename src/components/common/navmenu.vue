@@ -73,6 +73,7 @@ export default {
 .right {
   float: right;
   user-select: none;
+  line-height: 56px;
 
   a {
     width: 4em;

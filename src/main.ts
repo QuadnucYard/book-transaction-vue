@@ -19,8 +19,8 @@ import "element-plus/theme-chalk/src/message.scss"
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-//axios.defaults.baseURL = 'http://10.208.188.228:8081/api';
-axios.defaults.baseURL = 'http://localhost:8081/api';
+axios.defaults.baseURL = 'http://10.208.188.228:8081/api';
+//axios.defaults.baseURL = 'http://localhost:8081/api';
 axios.defaults.withCredentials = true;
 
 router.beforeEach((to, from, next) => {
