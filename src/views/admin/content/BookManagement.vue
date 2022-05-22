@@ -7,7 +7,33 @@
         <el-breadcrumb-item>图书管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <edit-form @onSubmit="loadBooks()" ref="edit"></edit-form>
+    <edit-form @submit="onSubmit" caption="添加/修改图书" :form="form" ref="edit">
+      <template #operation>添加图书</template>
+      <template #eform>
+        <el-form-item label="书名" :label-width="formLabelWidth" prop="title">
+          <el-input v-model="form.title" autocomplete="off" placeholder="不加《》"></el-input>
+        </el-form-item>
+        <el-form-item label="作者" :label-width="formLabelWidth" prop="author">
+          <el-input v-model="form.author" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="出版日期" :label-width="formLabelWidth" prop="date">
+          <el-date-picker v-model="form.date" type="month"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="出版社" :label-width="formLabelWidth" prop="publisher">
+          <el-input v-model="form.publisher" autocomplete="off"></el-input>
+        </el-form-item>
+        <!-- <el-form-item label="封面" :label-width="formLabelWidth" prop="cover">
+          <el-input v-model="form.cover" autocomplete="off" placeholder="图片 URL"></el-input>
+          <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
+        </el-form-item> -->
+        <el-form-item label="简介" :label-width="formLabelWidth" prop="abs">
+          <el-input type="textarea" v-model="form.abs" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item prop="id" style="height: 0">
+          <el-input type="hidden" v-model="form.id" autocomplete="off"></el-input>
+        </el-form-item>
+      </template>
+    </edit-form>
     <el-card style="margin: 18px 2%; width: 95%">
       <el-table :data="books" stripe style="width: 100%" :max-height="tableHeight">
         <el-table-column type="selection" width="55"> </el-table-column>
@@ -54,6 +80,17 @@ export default {
   components: { EditForm },
   data() {
     return {
+      form: {
+        id: "",
+        title: "",
+        author: "",
+        date: null,
+        publisher: "",
+        cover: "",
+        abs: "",
+        cid: "",
+      },
+      formLabelWidth: "6em",
       books: [],
     };
   },
@@ -89,7 +126,7 @@ export default {
     },
     editBook(item) {
       this.$refs.edit.dialogFormVisible = true;
-      this.$refs.edit.form = {
+      this.form = {
         id: item.id,
         cover: item.cover,
         title: item.title,
@@ -104,6 +141,14 @@ export default {
       this.$http.get("/book/list").then(resp => {
         if (resp && resp.data.code === 200) {
           _this.books = resp.data.result;
+        }
+      });
+    },
+    onSubmit() {
+      this.$http.post("/admin/content/books", this.form).then(resp => {
+        if (resp && resp.data.code === 200) {
+          this.$refs.edit.dialogFormVisible = false;
+          this.loadBooks();
         }
       });
     },
