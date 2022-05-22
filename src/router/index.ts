@@ -8,8 +8,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       keepalive: false
     },
-    alias: "/index",
     children: [
+      {
+        path: '/index',
+        component: () => import("@/views/main.vue"),
+      },
       {
         path: '/auth/login',
         name: 'login',
