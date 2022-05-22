@@ -4,10 +4,11 @@
     class="el-menu-admin"
     router
     mode="vertical"
-    background-color="#545c64"
+    background-color="#1a6a99"
     text-color="#fff"
     active-text-color="#ffd04b"
-    :collapse="isCollapse">
+    :collapse="isCollapse"
+    :default-openeds="['0', '1']">
     <div style="height: 80px"></div>
     <!--index 没有用但是必需字段-->
     <el-sub-menu
