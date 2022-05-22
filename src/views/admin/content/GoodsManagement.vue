@@ -22,7 +22,8 @@
         <el-table-column prop="name" label="商品名称" sortable fit> </el-table-column>
         <el-table-column prop="seller.name" label="卖家" sortable fit> </el-table-column>
         <el-table-column prop="price" label="价格" sortable fit> </el-table-column>
-        <el-table-column prop="date" label="发布日期" width="120"> </el-table-column>
+        <el-table-column prop="date" :formatter="timeFilter" label="发布时间" fit>
+        </el-table-column>
         <el-table-column prop="desc" label="简介" show-overflow-tooltip fit> </el-table-column>
         <el-table-column label="状态" sortable width="120">
           <template #default="{ row }">
@@ -53,6 +54,8 @@
 
 <script>
 import EditForm from "./EditForm.vue";
+import moment from "moment";
+
 export default {
   name: "BookManagement",
   components: { EditForm },
@@ -122,6 +125,12 @@ export default {
             this.$message("成功更改状态");
           }
         });
+    },
+    timeFilter(row, column, cellValue, index) {
+      const daterc = row[column.property];
+      if (daterc != null) {
+        return moment(daterc).format("YYYY/MM/DD");
+      }
     },
   },
 };

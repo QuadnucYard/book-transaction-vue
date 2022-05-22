@@ -48,7 +48,8 @@
         </el-table-column>
         <el-table-column prop="title" label="书名（展开查看摘要）" fit> </el-table-column>
         <el-table-column prop="author" label="作者" fit> </el-table-column>
-        <el-table-column prop="date" label="出版日期" width="120"> </el-table-column>
+        <el-table-column prop="date" :formatter="timeFilter" label="出版日期" fit>
+        </el-table-column>
         <el-table-column prop="publisher" label="出版社" fit> </el-table-column>
         <!--<el-table-column-->
         <!--prop="abs"-->
@@ -75,6 +76,8 @@
 
 <script>
 import EditForm from "./EditForm.vue";
+import moment from "moment";
+
 export default {
   name: "BookManagement",
   components: { EditForm },
@@ -151,6 +154,12 @@ export default {
           this.loadBooks();
         }
       });
+    },
+    timeFilter(row, column, cellValue, index) {
+      const daterc = row[column.property];
+      if (daterc != null) {
+        return moment(daterc).format("YYYY/MM/DD");
+      }
     },
   },
 };
