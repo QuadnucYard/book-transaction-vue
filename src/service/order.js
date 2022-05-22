@@ -24,6 +24,8 @@ export function payOrder(params) {
   return axios.get('/paySuccess', { params })
 }
 
-
+export function getOrderedBooks(id) {
+  return axios.get('/order/books', { params: { uid: id } });
+}
 
 

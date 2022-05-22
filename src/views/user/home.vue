@@ -27,8 +27,7 @@ export default {
   },
   mounted() {},
   methods: {
-    handleClick(tab, event) {
-      console.log(tab.props.name, this.$route.hash);
+    handleClick(tab) {
       this.$router.push({ path: `/user/${this.$store.state.user.uid}/${tab.props.name}` });
     },
   },
