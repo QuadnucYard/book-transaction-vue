@@ -57,6 +57,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/user/home.vue"),
         children: [
           { path: 'main', component: () => import("@/views/user/main.vue") },
+          { path: 'order', component: () => import("@/views/user/order.vue") },
           { path: 'purchase', component: () => import("@/views/user/mypurchase.vue") },
           { path: 'post', component: () => import("@/views/user/mypost.vue") },
           { path: 'setting', component: () => import("@/views/user/setting.vue") },

@@ -6,6 +6,7 @@
     <div class="header-container">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="主页" name="main"></el-tab-pane>
+        <el-tab-pane label="我的订单" name="order"></el-tab-pane>
         <el-tab-pane label="我购买的书" name="purchase"></el-tab-pane>
         <el-tab-pane label="我发布的书" name="post"></el-tab-pane>
         <el-tab-pane label="个人设置" name="setting"></el-tab-pane>
