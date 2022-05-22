@@ -52,6 +52,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/cart',
+        name: 'cart',
+        component: () => import("@/views/cart/cart.vue"),
+        meta: {
+          //requireAuth: true
+        }
+      },
+      {
         path: '/user/:uid',
         name: 'userhome',
         component: () => import("@/views/user/home.vue"),

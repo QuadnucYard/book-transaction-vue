@@ -7,7 +7,7 @@
       background-color="white"
       text-color="#222"
       active-text-color="green"
-      style="min-width: 400px; display: inline-block">
+      style="min-width: 600px; display: inline-block">
       <el-menu-item v-for="(item, i) in navList" :key="i" :index="item.name">
         {{ item.navItem }}
       </el-menu-item>
@@ -40,6 +40,7 @@ export default {
         { name: "/index", navItem: "首页" },
         { name: "/book/list", navItem: "商品列表" },
         { name: "/book/post", navItem: "商品发布" },
+        { name: "/cart", navItem: "购物车" },
       ],
     };
   },
@@ -82,6 +83,6 @@ export default {
 }
 
 .el-menu-item {
-  width: 8em;
+  width: 6em;
 }
 </style>

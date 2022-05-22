@@ -2,8 +2,10 @@
   <main>
     <div>
       <el-form>
-        <h>填写信息</h>
-        <el-form-item label=""></el-form-item>
+        <h3>填写信息</h3>
+        <el-form-item label="地址">
+          <el-input></el-input>
+        </el-form-item>
       </el-form>
     </div>
   </main>
@@ -11,7 +13,14 @@
 
 <script>
 export default {
-  setup() {},
+  data() {
+    return {
+      form: {
+        address: "",
+      },
+    };
+  },
+  methods: {},
 };
 </script>
 
