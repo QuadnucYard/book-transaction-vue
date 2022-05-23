@@ -10,14 +10,9 @@
               auto-complete="off"
               placeholder="请输入书相关信息"
               style="width: 100%"
-              v-model="searchForm.keywords"
-            ></el-input
+              v-model="searchForm.keywords"></el-input
           ></el-col>
-          <el-col :span="1">
-            <el-button type="primary" @click="searchBook"
-              >搜索</el-button
-            ></el-col
-          >
+          <el-col :span="1"> <el-button type="primary" @click="searchBook">搜索</el-button></el-col>
         </el-row>
       </el-form>
     </div>
@@ -89,11 +84,11 @@ export default {
       console.log("search book", this.axios);
       this.$http
         .get("/goods/list", { params: this.searchForm })
-        .then((res) => {
+        .then(res => {
           console.log(res);
           this.list = res.data.result;
         })
-        .catch((err) => {
+        .catch(err => {
           ElMessage.error({ message: "网络异常" });
           //this.$data.list = queryBookList(this.$data.searchForm);
         })

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export function getDetail(id) {
-  return axios.get(`/goods/detail/${id}`);
+  return axios.get(`/goods?id=${id}`);
 }
 
 export function getCategory() {

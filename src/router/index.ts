@@ -38,12 +38,17 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: '/book/:bookid',
+        path: '/book/:bookid(\\d+)',
         name: 'bookview',
         component: () => import("@/views/book/bookview.vue"),
         meta: {
           keepalive: false
         }
+      },
+      {
+        path: '/book/:bookid(.*)',
+        name: 'error',
+        component: () => import('@/views/pages/Error404.vue')
       },
       {
         path: '/book/post',
@@ -100,8 +105,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/:pathMatch(.*)',
     name: 'error',
-    component: () => import('@/views/pages/Error404.vue')
-  }
+    component: () => import('@/views/pages/Error404.vue'),
+    alias: '/notfound'
+  },
 ]
 
 const router: Router = createRouter({
