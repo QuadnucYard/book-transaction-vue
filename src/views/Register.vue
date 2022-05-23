@@ -7,7 +7,7 @@
           :model="registerForm"
           :rules="rules"
           label-width="100px"
-          class="demo-registerForm"
+          class="register-form"
           autocomplete="off">
           <el-form-item label="用户名" prop="name">
             <el-input v-model="registerForm.name" />
@@ -18,13 +18,16 @@
           <el-form-item label="确认密码" prop="cpwd">
             <el-input v-model="registerForm.cpwd" type="password" />
           </el-form-item>
-          <el-form-item label="验证码" prop="code">
+          <!-- <el-form-item label="验证码" prop="code">
             <el-input v-model="registerForm.code" maxlength="4" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="registerForm.email" />
-            <el-button size="small" round @click="sendMsg">发送验证码</el-button>
-            <span class="status">{{ statusMsg }}</span>
+            <!-- <el-button size="small" round @click="sendMsg">发送验证码</el-button>
+            <span class="status">{{ statusMsg }}</span> -->
+          </el-form-item>
+          <el-form-item label="电话" prop="phone">
+            <el-input v-model="registerForm.phone" />
           </el-form-item>
           <el-form-item prop="agreed">
             <el-checkbox v-model="registerForm.agreed">同意注册协议</el-checkbox>
@@ -49,8 +52,6 @@ import { encrypt } from "../utils/rsaEncrypt";
 export default {
   data() {
     return {
-      step: 2,
-      active: 0,
       statusMsg: "",
       error: "",
       registerForm: {
@@ -59,6 +60,7 @@ export default {
         pwd: "",
         cpwd: "",
         email: "",
+        phone: "",
         agreed: false,
       },
       rules: {
@@ -162,7 +164,7 @@ export default {
               username: this.registerForm.name,
               password: this.registerForm.pwd,
               name: "",
-              phone: "",
+              phone: this.registerForm.phone,
               email: this.registerForm.email,
             })
             .then(res => {
@@ -227,4 +229,12 @@ export default {
     }
   }
 }
+
+// .register-form {
+//   margin: 2em;
+//   border-radius: 6px;
+//   background: #ffffff;
+//   width: 385px;
+//   padding: 25px 25px 5px 25px;
+// }
 </style>

@@ -16,44 +16,31 @@
         </el-row>
       </el-form>
     </div>
-    <div class="card" style="padding: 1.3em; display: none">
-      <div>
-        <div class="table">
-          <div class="header-wrap">
-            <div class="header"></div>
-          </div>
-        </div>
-        <div class="row-wrap">
-          <div class="row" v-for="item in list" :key="item.id">
-            <span style="width: 6em">{{ item.id }}</span>
-            <span style="width: 100%">{{ item.name }}</span>
-            <span style="width: 8em">{{ item.book.author }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="card" style="padding: 1.3em">
       <div>
         <div class="item-card" v-for="item in list" :key="item.id">
-          <div>
-            <div>
-              <span>{{ item.id }}</span>
-              <span @click="toBookView(item)">{{ item.name }}</span>
-              <span>{{ item.price }}</span>
-              <span>{{ item.seller.username }}</span>
-              <span>{{ item.date }}</span>
+          <el-card class="box-card" @click="toBookView(item)">
+            <template #header>
+              <div class="card-header">
+                <span>{{ item.id }}</span>
+                <span>{{ item.name }}</span>
+                <span>￥{{ item.price }}</span>
+                <span>发布者：{{ item.seller.username }}</span>
+                <span>{{ formatDate(item.date) }}</span>
+                <el-button style="float: right" @click="toBookView(item)">查看</el-button>
+              </div>
+            </template>
+            <div class="card-header">
+              <span>书名：{{ item.book.title }}</span>
+              <span>作者：{{ item.book.author }}</span>
+              <span>出版社：{{ item.book.publisher }}</span>
+              <span>出版日期：{{ formatDate2(item.book.date) }}</span>
             </div>
-          </div>
-          <div>
-            <p v-if="item.book.title">{{ item.book.title }}</p>
-            <p v-if="item.book.author">{{ item.book.author }}</p>
-            <p v-if="item.book.publisher">{{ item.book.publisher }}</p>
-            <p v-if="item.book.date">{{ item.book.date }}</p>
-          </div>
-          <div>
-            <p>{{ item.desc }}</p>
-            <!-- <img :src="item.image" /> -->
-          </div>
+            <div class="card-header">
+              <p>简介：</p>
+              {{ item.desc }}
+            </div>
+          </el-card>
         </div>
       </div>
     </div>
@@ -63,7 +50,7 @@
 
 <script>
 import { ElMessage } from "element-plus";
-import { queryBookList } from "../../api/localservice.ts";
+import moment from "moment";
 
 export default {
   setup() {},
@@ -71,6 +58,7 @@ export default {
     return {
       searchForm: {
         keywords: "",
+        status: 1,
       },
       list: [],
     };
@@ -90,7 +78,6 @@ export default {
         })
         .catch(err => {
           ElMessage.error({ message: "网络异常" });
-          //this.$data.list = queryBookList(this.$data.searchForm);
         })
         .then(() => {
           console.log("finally", arguments);
@@ -102,15 +89,21 @@ export default {
         params: { bookid: item.id },
       });
     },
+    formatDate(date) {
+      return date == null ? "" : moment(date).format("YYYY/MM/DD");
+    },
+    formatDate2(date) {
+      return date == null ? "" : moment(date).format("YYYY/MM");
+    },
   },
 };
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 main {
   > div {
-    max-width: 1200px;
+    max-width: 1000px;
   }
 }
 
@@ -144,6 +137,17 @@ main {
   }
   > span:not(:last-child) {
     padding-right: 6px;
+  }
+}
+
+.box-card {
+  margin: 1em 0;
+  cursor: pointer;
+}
+
+.card-header {
+  span {
+    margin: 0 1em;
   }
 }
 </style>
