@@ -1,13 +1,8 @@
 <template>
-  <el-card class="admin-header">
-    <a href="/index">
-      <img
-        src="@/assets/img/icon/icon2.png"
-        alt=""
-        width="55px"
-        style="float: left; margin-top: -5px" />
-    </a>
-    <span style="font-size: 24px; font-weight: bold; position: absolute">KOOB后台管理</span>
+  <el-card class="admin-header" @click="toIndex" title="点击回到首页">
+    <span style="font-size: 24px; font-weight: bold; position: absolute" href="/index"
+      >KOOB后台管理</span
+    >
     <i class="el-icon-switch-button" v-on:click="logout" style="font-size: 40px; float: right"></i>
   </el-card>
 </template>
@@ -32,6 +27,9 @@ export default {
           }
         })
         .catch(failResponse => {});
+    },
+    toIndex() {
+      this.$router.push({ name: "index" });
     },
   },
 };

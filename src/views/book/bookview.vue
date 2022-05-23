@@ -1,25 +1,22 @@
 <template>
   <main>
     <div v-if="!notfound">
-      <div class="card">
-        <div>这是左边的图</div>
-        <div>这是右边的选项 <el-button @click="purchase">购买</el-button></div>
-      </div>
-      <div class="card">
-        <div>详细信息</div>
-        <div v-if="book">
-          <p v-if="book.title">{{ book.title }}</p>
-          <p v-if="book.author">{{ book.author }}</p>
-          <p v-if="book.publisher">{{ book.publisher }}</p>
-          <p v-if="book.date">{{ book.date }}</p>
+      <div class="card" v-if="goods">
+        <div style="line-height: 2em">
+          <div>{{ goods.name }}</div>
+          <div>￥{{ goods.price }}</div>
+          <div>发布者：{{ goods.seller.username }}</div>
+          <div>{{ formatDate(goods.date) }}</div>
         </div>
+        <div style="margin-top: 2em">详细信息</div>
+        <div v-if="goods?.book">
+          <p v-if="goods.book.title">标题：{{ goods.book.title }}</p>
+          <p v-if="goods.book.author">作者：{{ goods.book.author }}</p>
+          <p v-if="goods.book.publisher">出版社：{{ goods.book.publisher }}</p>
+          <p v-if="goods.book.date">日期：{{ formatDate2(goods.book.date) }}</p>
+        </div>
+        <el-button @click="purchase">加入购物车</el-button>
       </div>
-      <!-- <div class="card">
-      <div>卖家介绍</div>
-      <div>
-        <p>就是介绍</p>
-      </div>
-    </div> -->
     </div>
     <div v-else><h1>Not Found!</h1></div>
   </main>
@@ -27,12 +24,13 @@
 
 <script>
 import { getDetail } from "@/service/goods.js";
+import moment from "moment";
 
 export default {
   setup() {},
   data() {
     return {
-      book: null,
+      goods: null,
       notfound: false,
     };
   },
@@ -40,11 +38,11 @@ export default {
     console.log("mounted");
     if (this.$route.params.bookid > 0) {
       const {
-        data: { result: book },
+        data: { result: goods },
       } = await getDetail(this.$route.params.bookid);
-      if (book) {
-        console.log(book);
-        this.$data.book = book;
+      if (goods) {
+        console.log(goods);
+        this.goods = goods;
         return;
       }
     }
@@ -65,9 +63,31 @@ export default {
           }
         });
     },
+    formatDate(date) {
+      return date == null ? "" : moment(date).format("YYYY/MM/DD");
+    },
+    formatDate2(date) {
+      return date == null ? "" : moment(date).format("YYYY/MM");
+    },
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+main {
+  > div {
+    max-width: 800px;
+    margin: auto;
+  }
+}
+
+.card {
+  display: block;
+  margin: 1.3em auto 1.3em auto;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
+  box-sizing: border-box;
+  padding: 1em;
+}
 </style>
