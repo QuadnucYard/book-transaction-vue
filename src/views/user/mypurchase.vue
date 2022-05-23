@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div v-for="item in list" :key="item.id">
-      <span>{{ item.title }}</span>
-      <span>{{ item.author }}</span>
-      <span>{{ item.publisher }}</span>
+    <div v-for="item in list" :key="item.id" class="list-item">
+      <el-card>
+        <span>{{ item.title }}</span>
+        <span>{{ item.author }}</span>
+        <span>{{ item.publisher }}</span></el-card
+      >
     </div>
   </div>
 </template>
@@ -25,3 +27,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.list-item {
+  margin: 0.5em 0;
+  // border: 1px solid rgb(140, 140, 170);
+  // padding: 0.4em;
+  span {
+    margin: 0em 1em;
+  }
+}
+</style>

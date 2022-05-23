@@ -4,10 +4,9 @@
       <el-radio-group v-model="status" @change="onChangeTab" style="margin-bottom: 30px">
         <el-radio-button :label="-1">全　部</el-radio-button>
         <el-radio-button :label="0">待付款</el-radio-button>
-        <el-radio-button :label="1">待确认</el-radio-button>
-        <el-radio-button :label="2">待发货</el-radio-button>
-        <el-radio-button :label="3">已发货</el-radio-button>
-        <el-radio-button :label="4">交易完成</el-radio-button>
+        <el-radio-button :label="1">待发货</el-radio-button>
+        <el-radio-button :label="2">已发货</el-radio-button>
+        <el-radio-button :label="3">交易完成</el-radio-button>
       </el-radio-group>
 
       <div class="order-list-refresh">
@@ -88,6 +87,6 @@ export default {
 }
 
 .box-card {
-  width: 480px;
+  margin: 1em 0;
 }
 </style>

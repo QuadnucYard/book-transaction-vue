@@ -16,16 +16,21 @@
         style="float: right; font-size: 45px; color: #222; padding-top: 8px"></i>
     </el-menu>
     <div class="right">
-      <el-link type="primary" :underline="false" v-show="!username">
-        <router-link :to="{ name: 'register' }">注册</router-link>
-      </el-link>
-      <el-link type="primary" :underline="false" v-show="!username">
-        <router-link :to="{ name: 'login' }">登录</router-link>
-      </el-link>
-      <el-link type="default" :underline="false" v-show="username" @click="toHome">{{
-        username
-      }}</el-link>
-      <el-link type="primary" :underline="false" v-show="username" @click="logout"> 注销 </el-link>
+      <div v-show="!username">
+        <el-link type="primary" :underline="false">
+          <router-link :to="{ name: 'register' }">注册</router-link>
+        </el-link>
+        <el-link type="primary" :underline="false">
+          <router-link :to="{ name: 'login' }">登录</router-link>
+        </el-link>
+      </div>
+      <div v-show="username">
+        <el-link type="default" :underline="false" @click="toTaobao"
+          >余额：{{ userbalance }}</el-link
+        >
+        <el-link type="default" :underline="false" @click="toHome">{{ username }}</el-link>
+        <el-link type="primary" :underline="false" @click="logout"> 注销 </el-link>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +53,9 @@ export default {
     username() {
       return this.$store.state.user?.name;
     },
+    userbalance() {
+      return this.$store.state.user?.money;
+    },
   },
   methods: {
     logout() {
@@ -65,6 +73,11 @@ export default {
           uid: this.$store.state.user.uid,
         },
       });
+    },
+    toTaobao() {
+      window.open(
+        "https://item.taobao.com/item.htm?spm=a1z10.3-c.w4002-23881891636.9.4cec3554J5tsYV&id=651362539834"
+      );
     },
   },
 };

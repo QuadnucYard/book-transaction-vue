@@ -1,10 +1,20 @@
 <template>
   <div>
     <div v-for="item in list" :key="item.id">
-      <span>{{ item.name }}</span>
-      <span>{{ item.price }}</span>
-      <span>{{ item.date }}</span
-      ><span>{{ item.book }}</span>
+      <el-card class="box-card">
+        <template #header>
+          <div class="card-header">
+            <span>{{ item.name }}</span>
+            <span>{{ item.price }}</span>
+            <span>{{ item.date }}</span>
+          </div>
+        </template>
+        <div class="card-header">
+          <span>{{ item.book.title }}</span>
+          <span>{{ item.book.author }}</span>
+          <span>{{ item.book.publisher }}</span>
+        </div>
+      </el-card>
     </div>
   </div>
 </template>
@@ -26,3 +36,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.box-card {
+  margin: 1em 0;
+}
+
+.card-header {
+  span {
+    margin: 0 1em;
+  }
+}
+</style>

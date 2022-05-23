@@ -22,7 +22,7 @@
 export default {
   data() {
     return {
-      activeName: "purchase",
+      activeName: "main",
     };
   },
   mounted() {},
