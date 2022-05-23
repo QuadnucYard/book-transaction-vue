@@ -24,5 +24,6 @@ div > span {
 
 .main {
   background-color: rgb(239, 239, 239);
+  min-height: calc(90vh - 60px);
 }
 </style>
